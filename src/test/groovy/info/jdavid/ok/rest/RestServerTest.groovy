@@ -2,13 +2,18 @@ package info.jdavid.ok.rest
 
 import com.squareup.okhttp.HttpUrl
 import com.squareup.okhttp.OkHttpClient
+import com.squareup.okhttp.Protocol
 import com.squareup.okhttp.Request
 import com.squareup.okhttp.RequestBody
+import groovy.json.JsonBuilder
+import groovy.json.JsonParser
+import groovy.json.JsonSlurper
 import info.jdavid.ok.server.MediaTypes
 import info.jdavid.ok.server.Response
 import info.jdavid.ok.server.StatusLines
-import org.junit.After
-import org.junit.Before
+import okio.Buffer
+import org.junit.AfterClass
+import org.junit.BeforeClass
 import org.junit.Test
 import static org.junit.Assert.*
 
@@ -27,41 +32,67 @@ class RestServerTest {
     new OkHttpClient().with { setReadTimeout(0, TimeUnit.SECONDS); it }
   }
 
-  private RestServer server() {
+  private static RestServer server() {
     mServer.clearHandlers()
   }
 
-  private RestServer mServer = null;
+  private static RestServer mServer = null;
 
-  @Before
-  public void setUp() {
-    mServer = new RestServer().with { port(8080); it }
+  @BeforeClass
+  public static void setUp() {
+    mServer = new RestServer().with { port(8080); start(); it }
   }
 
-  @After
-  public void tearDown() {
+  @AfterClass
+  public static void tearDown() {
     mServer.shutdown()
   }
 
   @Test
   public void test1() {
-    def testHandler = { new Response.Builder().statusLine(StatusLines.OK).noBody().build() }
+    def testHandler = { a, b ->
+      new Response.Builder().statusLine(StatusLines.OK).noBody().build()
+    }
     server().get('/test', testHandler).with {
-      start()
       def r = client().newCall(request('test').get().build()).execute()
+      assertEquals(Protocol.HTTP_1_1, r.protocol())
       assertEquals(200, r.code())
-      shutdown()
+      assertEquals('0', r.header('Content-Length'))
+      assertEquals('', r.body().string())
     }
   }
 
   @Test
   public void test2() {
-    def testHandler = { new Response.Builder().statusLine(StatusLines.OK).noBody().build() }
-    server().test('/test', testHandler).with {
-      start()
-      def r = client().newCall(request('test').method('TEST', RequestBody.create(MediaTypes.TEXT, 'a')).build()).execute()
+    def testHandler = { Buffer body, List<String> it ->
+      new Response.Builder().statusLine(StatusLines.OK).body(it[0]).build()
+    }
+    server().get('/test/([a-z]+)', testHandler).with {
+      def r = client().newCall(request('test', 'abc').get().build()).execute()
+      assertEquals(Protocol.HTTP_1_1, r.protocol())
       assertEquals(200, r.code())
-      shutdown()
+      assertEquals('3', r.header('Content-Length'))
+      assertEquals('abc', r.body().string())
+    }
+  }
+
+  @Test
+  public void test3() {
+    def testHandler = { Buffer body, List<String> it ->
+      def json = new JsonSlurper().parseText(body.readUtf8())
+      json.key1 = it[0]
+      json.key2 = it[1]
+      new Response.Builder().statusLine(StatusLines.OK).
+        body(new JsonBuilder(json).toString(), MediaTypes.JSON).build()
+    }
+    server().post('/test/([a-z]+)/([0-9]+)', testHandler).with {
+      def body = RequestBody.create(MediaTypes.JSON, '{"key1":null,"key2":null}')
+      def r = client().newCall(request('test', 'abc', '123').post(body).build()).execute()
+      assertEquals(Protocol.HTTP_1_1, r.protocol())
+      assertEquals(200, r.code())
+      assertEquals('27', r.header('Content-Length'))
+      assertTrue(r.header('Content-Type').startsWith('application/json'))
+      assertEquals('{"key1":"abc","key2":"123"}', r.body().string())
     }
   }
 

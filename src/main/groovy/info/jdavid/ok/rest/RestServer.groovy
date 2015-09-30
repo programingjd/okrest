@@ -8,14 +8,7 @@ import okio.Buffer
 
 import java.util.regex.Pattern
 
-trait ServerTrait {
-  abstract RestServer method(String name, String pattern, Closure<Response> closure)
-  def methodMissing(String name, args) {
-    return method(name, *args)
-  }
-}
-
-class RestServer extends HttpServer implements ServerTrait {
+class RestServer extends HttpServer {
 
   private Map<String, Map<Pattern, Closure<Response>>> handlers = [:]
 
@@ -58,17 +51,12 @@ class RestServer extends HttpServer implements ServerTrait {
     return this
   }
 
-  RestServer method(String method, String pattern, Closure<Response> closure) {
-    register(method.toUpperCase(), pattern, closure)
-    return this
-  }
-
   @Override
   protected Response handle(String method, String path, Headers requestHeaders, Buffer requestBody) {
     for (def handler in handlers[method]) {
       def matcher = path =~ handler.key
       if (matcher.matches()) {
-        return handler.value(matcher[0].drop(1))
+        return handler.value(requestBody, matcher[0]?.drop(1))
       }
     }
     return new Response.Builder().statusLine(StatusLines.NOT_FOUND).noBody().build()
