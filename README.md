@@ -1,2 +1,2 @@
 # okrest
-Simple http server on top of okhttp mock server
+Simple http rest server on top of okserver.
