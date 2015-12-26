@@ -46,7 +46,7 @@ The closure parameters are:
   - the request headers `Headers`
   - the regex captured groups `List&lt;String&gt;`
 
-Example: (using [okjson](http://github.com/programingjd/okjson))
+Example: (using [okjson](https://github.com/programingjd/okjson))
 
 ```groovy
 List data = Collections.synchronizedList([
