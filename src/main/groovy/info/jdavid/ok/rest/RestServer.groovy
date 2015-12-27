@@ -30,6 +30,10 @@ class RestServer extends HttpServer {
     return this
   }
 
+  protected void setup() {
+    super.setup()
+  }
+
   public RestServer head(final String pattern, final Closure<Response> closure) {
     return register('HEAD', pattern, closure)
   }
