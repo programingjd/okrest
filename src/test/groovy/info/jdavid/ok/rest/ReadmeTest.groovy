@@ -1,7 +1,7 @@
 package info.jdavid.ok.rest
 
-import com.squareup.okhttp.Headers
-import com.squareup.okhttp.MediaType
+import okhttp3.Headers
+import okhttp3.MediaType
 import groovy.transform.CompileStatic
 import info.jdavid.ok.json.Builder
 import info.jdavid.ok.json.Parser
@@ -14,6 +14,7 @@ import org.junit.Test
 
 class ReadmeTest {
 
+  @SuppressWarnings("GroovyUnusedAssignment")
   @Test @CompileStatic
   public void test1() {
     List data = Collections.synchronizedList([

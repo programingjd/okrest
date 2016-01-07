@@ -1,13 +1,13 @@
 package info.jdavid.ok.rest
 
-import com.squareup.okhttp.Headers
-import com.squareup.okhttp.HttpUrl
-import com.squareup.okhttp.MediaType
-import com.squareup.okhttp.OkHttpClient
-import com.squareup.okhttp.Protocol
-import com.squareup.okhttp.Request
-import com.squareup.okhttp.RequestBody
-import com.squareup.okhttp.ResponseBody
+import okhttp3.Headers
+import okhttp3.HttpUrl
+import okhttp3.MediaType
+import okhttp3.OkHttpClient
+import okhttp3.Protocol
+import okhttp3.Request
+import okhttp3.RequestBody
+import okhttp3.ResponseBody
 import groovy.json.JsonBuilder
 import groovy.json.JsonSlurper
 import info.jdavid.ok.server.MediaTypes
@@ -32,7 +32,7 @@ class RestServerTest {
   }
 
   private static OkHttpClient client =
-    new OkHttpClient().with { setReadTimeout(0, TimeUnit.SECONDS); it }
+    new OkHttpClient.Builder().readTimeout(0, TimeUnit.SECONDS).build()
 
   private static RestServer server() {
     mServer.clearHandlers()

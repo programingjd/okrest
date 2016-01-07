@@ -1,6 +1,6 @@
 package info.jdavid.ok.rest
 
-import com.squareup.okhttp.Headers
+import okhttp3.Headers
 import groovy.transform.CompileStatic
 import info.jdavid.ok.server.HttpServer
 import info.jdavid.ok.server.Response
@@ -80,6 +80,7 @@ class RestServer extends HttpServer {
           return new Response.Builder().statusLine(StatusLines.INTERNAL_SERVER_ERROR).noBody().build()
         }
       }
+      else return null
     } as Response
     return response ?: new Response.Builder().statusLine(StatusLines.NOT_FOUND).noBody().build()
   }
