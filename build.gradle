@@ -4,12 +4,12 @@ buildscript {
   }
   dependencies {
     classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.6'
-    classpath 'org.jsoup:jsoup:1.8.3'
+    classpath 'org.jsoup:jsoup:1.9.2'
   }
 }
 
 group 'info.jdavid.ok.rest'
-version '3.3.0'
+version '3.3.1'
 
 apply plugin: 'groovy'
 apply plugin: 'java'
@@ -37,10 +37,10 @@ dependencies {
 //      url = 'http://dl.bintray.com/programingjd/maven/info/jdavid/ok/server/okserver/1.0/'
 //    }
 //  }
-  compile 'info.jdavid.ok.server:okserver:3.3.0'
+  compile 'info.jdavid.ok.server:okserver:3.3.1'
   testCompile 'junit:junit:4.12'
-  testCompile 'com.squareup.okhttp3:okhttp:3.3.0'
-  testCompile 'info.jdavid.ok.json:okjson:3.3.0'
+  testCompile 'com.squareup.okhttp3:okhttp:3.3.1'
+  testCompile 'info.jdavid.ok.json:okjson:3.3.1'
 }
 
 jacoco {
