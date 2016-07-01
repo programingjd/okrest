@@ -51,6 +51,35 @@ class RestServerTest {
   }
 
   @Test
+  public void testOptions() {
+    def testHandler = { b, h, c ->
+      new Response.Builder().statusLine(StatusLines.OK).
+        cors('*', [ 'PUT' ]).
+        header('test', 'ok').noBody().build()
+    }
+    server().options('/test', testHandler).with {
+      def r = client.newCall(
+        request('test').
+          method('OPTIONS', RequestBody.create(MediaTypes.OCTET_STREAM, new byte[0])).
+          build()
+      ).execute()
+      assertEquals(Protocol.HTTP_1_1, r.protocol())
+      assertEquals(200, r.code())
+      assertEquals('0', r.header('Content-Length'))
+      assertEquals('', r.body().string())
+      assertEquals('ok', r.header('test'))
+      assertEquals('*', r.header('Access-Control-Allow-Origin'))
+      assertEquals('PUT', r.header('Access-Control-Allow-Methods'))
+      it
+    }.with {
+      def r = client.newCall(request('test2').head().build()).execute()
+      assertEquals(Protocol.HTTP_1_1, r.protocol())
+      assertEquals(404, r.code())
+      it
+    }
+  }
+
+  @Test
   public void testHead() {
     def testHandler = { b, h, c ->
       new Response.Builder().statusLine(StatusLines.OK).header('test', 'ok').noBody().build()

@@ -35,6 +35,10 @@ class RestServer extends HttpServer {
     super.setup()
   }
 
+  public RestServer options(final String pattern, final Closure<Response> closure) {
+    return register('OPTIONS', pattern, closure)
+  }
+
   public RestServer head(final String pattern, final Closure<Response> closure) {
     return register('HEAD', pattern, closure)
   }
