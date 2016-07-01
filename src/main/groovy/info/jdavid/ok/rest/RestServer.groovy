@@ -5,6 +5,7 @@ import groovy.transform.CompileStatic
 import info.jdavid.ok.server.HttpServer
 import info.jdavid.ok.server.Response
 import info.jdavid.ok.server.StatusLines
+import okhttp3.HttpUrl
 import okio.Buffer
 
 import java.util.regex.Pattern
@@ -59,9 +60,10 @@ class RestServer extends HttpServer {
   }
 
   @Override
-  protected Response handle(final String method, final String path,
+  protected Response handle(final boolean secure, final String method, final HttpUrl url,
                             final Headers requestHeaders, final Buffer requestBody) {
     def methodHandlers = handlers[method]
+    final String path = url.encodedPath()
     final Response response = methodHandlers == null ? null : methodHandlers.findResult { key, value ->
       def matcher = path =~ key
       if (matcher.matches()) {
