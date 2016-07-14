@@ -1,4 +1,4 @@
-![jcenter](https://img.shields.io/badge/_jcenter_-_3.3.1-6688ff.png?style=flat) &#x2003; ![jcenter](https://img.shields.io/badge/_Tests_-_8/8-green.png?style=flat)
+![jcenter](https://img.shields.io/badge/_jcenter_-_3.3.3-6688ff.png?style=flat) &#x2003; ![jcenter](https://img.shields.io/badge/_Tests_-_9/9-green.png?style=flat)
 # okrest
 A simple http rest server for the jvm, written in groovy with [okserver](https://github.com/programingjd/okserver).
 
@@ -7,7 +7,7 @@ A simple http rest server for the jvm, written in groovy with [okserver](https:/
 The maven artifacts are on [Bintray](https://bintray.com/programingjd/maven/info.jdavid.ok.rest/view)
 and [jcenter](https://bintray.com/search?query=info.jdavid.ok.rest).
 
-[Download](https://bintray.com/artifact/download/programingjd/maven/info/jdavid/ok/rest/okrest/3.3.1/okrest-3.3.1.jar) the latest jar.
+[Download](https://bintray.com/artifact/download/programingjd/maven/info/jdavid/ok/rest/okrest/3.3.3/okrest-3.3.3.jar) the latest jar.
 
 __Maven__
 
@@ -17,7 +17,7 @@ Include [those settings](https://bintray.com/repo/downloadMavenRepoSettingsFile/
 <dependency>
   <groupId>info.jdavid.ok.rest</groupId>
   <artifactId>okrest</artifactId>
-  <version>3.3.1</version>
+  <version>3.3.3</version>
 </dependency>
 ```
 __Gradle__
@@ -30,7 +30,7 @@ repositories {
 ```
 ```
 dependencies {
-  compile 'info.jdavid.ok.rest:okrest:3.3.1'
+  compile 'info.jdavid.ok.rest:okrest:3.3.3'
 }
 ```
 

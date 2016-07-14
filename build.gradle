@@ -9,7 +9,7 @@ buildscript {
 }
 
 group 'info.jdavid.ok.rest'
-version '3.3.1i'
+version '3.3.3'
 
 apply plugin: 'groovy'
 apply plugin: 'java'
@@ -37,10 +37,10 @@ dependencies {
 //      url = 'http://dl.bintray.com/programingjd/maven/info/jdavid/ok/server/okserver/1.0/'
 //    }
 //  }
-  compile 'info.jdavid.ok.server:okserver:3.3.1i'
+  compile 'info.jdavid.ok.server:okserver:3.4.1b'
   testCompile 'junit:junit:4.12'
-  testCompile 'com.squareup.okhttp3:okhttp:3.3.1'
-  testCompile 'info.jdavid.ok.json:okjson:3.3.1'
+  testCompile 'com.squareup.okhttp3:okhttp:3.4.1'
+  testCompile 'info.jdavid.ok.json:okjson:3.3.3'
 }
 
 jacoco {
