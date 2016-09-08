@@ -1,10 +1,11 @@
 package info.jdavid.ok.rest
 
-import okhttp3.Headers
 import groovy.transform.CompileStatic
 import info.jdavid.ok.server.HttpServer
+import info.jdavid.ok.server.RequestHandler
 import info.jdavid.ok.server.Response
 import info.jdavid.ok.server.StatusLines
+import okhttp3.Headers
 import okhttp3.HttpUrl
 import okio.Buffer
 
@@ -26,10 +27,44 @@ class RestServer extends HttpServer {
     return map
   }
 
+  public RestServer() {
+    super()
+    super.requestHandler(new RequestHandler() {
+      @Override public Response handle(final boolean secure, final String method, final HttpUrl url,
+                                       final Headers requestHeaders, final Buffer requestBody) {
+        def methodHandlers = handlers[method]
+        final String path = url.encodedPath()
+        final Response response = methodHandlers == null ? null : methodHandlers.findResult { key, value ->
+          def matcher = path =~ key
+          if (matcher.matches()) {
+            final List<String> groups
+            if (matcher[0] instanceof List) {
+              groups = (matcher[0] as List<String>).drop(1)
+            }
+            else {
+              groups = []
+            }
+            try {
+              return value(requestBody, requestHeaders, groups)
+            }
+            catch (Exception exception) {
+              exception.printStackTrace()
+              return new Response.Builder().statusLine(StatusLines.INTERNAL_SERVER_ERROR).noBody().build()
+            }
+          }
+          else return null
+        } as Response
+        return response ?: new Response.Builder().statusLine(StatusLines.NOT_FOUND).noBody().build()
+      }
+    })
+  }
+
   RestServer clearHandlers() {
     handlers.clear()
     return this
   }
+
+
 
   protected void setup() {
     super.setup()
@@ -61,34 +96,6 @@ class RestServer extends HttpServer {
 
   public RestServer patch(final String pattern, final Closure<Response> closure) {
     return register('PATCH', pattern, closure)
-  }
-
-  @Override
-  protected Response handle(final boolean secure, final String method, final HttpUrl url,
-                            final Headers requestHeaders, final Buffer requestBody) {
-    def methodHandlers = handlers[method]
-    final String path = url.encodedPath()
-    final Response response = methodHandlers == null ? null : methodHandlers.findResult { key, value ->
-      def matcher = path =~ key
-      if (matcher.matches()) {
-        final List<String> groups
-        if (matcher[0] instanceof List) {
-          groups = (matcher[0] as List<String>).drop(1)
-        }
-        else {
-          groups = []
-        }
-        try {
-          return value(requestBody, requestHeaders, groups)
-        }
-        catch (Exception exception) {
-          exception.printStackTrace()
-          return new Response.Builder().statusLine(StatusLines.INTERNAL_SERVER_ERROR).noBody().build()
-        }
-      }
-      else return null
-    } as Response
-    return response ?: new Response.Builder().statusLine(StatusLines.NOT_FOUND).noBody().build()
   }
 
 }
