@@ -31,6 +31,13 @@ class RestServerTest {
     new Request.Builder().url(url.build())
   }
 
+  private static Request.Builder requestWithQuery(final Map<String, String> query, final String... segments) {
+    HttpUrl.Builder url = new HttpUrl.Builder().scheme('http').host('localhost').port(8080)
+    segments.each { url.addPathSegment(it) }
+    query.each { url.addQueryParameter(it.key, it.value) }
+    new Request.Builder().url(url.build())
+  }
+
   private static OkHttpClient client =
     new OkHttpClient.Builder().readTimeout(0, TimeUnit.SECONDS).build()
 
@@ -52,7 +59,7 @@ class RestServerTest {
 
   @Test
   public void testOptions() {
-    def testHandler = { b, h, c ->
+    def testHandler = { ->
       new Response.Builder().statusLine(StatusLines.OK).
         cors('*', [ 'PUT' ]).
         header('test', 'ok').noBody().build()
@@ -81,7 +88,7 @@ class RestServerTest {
 
   @Test
   public void testHead() {
-    def testHandler = { b, h, c ->
+    def testHandler = { ->
       new Response.Builder().statusLine(StatusLines.OK).header('test', 'ok').noBody().build()
     }
     server().head('/test', testHandler).with {
@@ -102,7 +109,7 @@ class RestServerTest {
 
   @Test
   public void testGet() {
-    def testHandler = { b, h, c ->
+    def testHandler = { ->
       new Response.Builder().statusLine(StatusLines.OK).noBody().build()
     }
     server().get('/test', testHandler).with {
@@ -116,6 +123,22 @@ class RestServerTest {
       def r = client.newCall(request('test2').get().build()).execute()
       assertEquals(Protocol.HTTP_1_1, r.protocol())
       assertEquals(404, r.code())
+      it
+    }
+  }
+
+  @Test
+  public void testGetQueryInUrl() {
+    def testHandler = { Buffer body, Headers headers, List<String> captures, HttpUrl url ->
+      new Response.Builder().statusLine(StatusLines.OK).body(url.queryParameter('test')).build()
+    }
+    server().get('/test/q', testHandler).with {
+      def q = [ test: 'query' ]
+      def r = client.newCall(requestWithQuery(q, 'test', 'q').get().build()).execute()
+      assertEquals(Protocol.HTTP_1_1, r.protocol())
+      assertEquals(200, r.code())
+      assertEquals('5', r.header('Content-Length'))
+      assertEquals('query', r.body().string())
       it
     }
   }

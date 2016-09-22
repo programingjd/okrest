@@ -1,4 +1,4 @@
-![jcenter](https://img.shields.io/badge/_jcenter_-_3.4.1-11-6688ff.png?style=flat) &#x2003; ![jcenter](https://img.shields.io/badge/_Tests_-_9/9-green.png?style=flat)
+![jcenter](https://img.shields.io/badge/_jcenter_-_3.4.1-11-6688ff.png?style=flat) &#x2003; ![jcenter](https://img.shields.io/badge/_Tests_-_10/10-green.png?style=flat)
 # okrest
 A simple http rest server for the jvm, written in groovy with [okserver](https://github.com/programingjd/okserver).
 
@@ -55,7 +55,7 @@ List data = Collections.synchronizedList([
   [name: 'c', value: '3']
 ]);
 def server = new RestServer().with {
-  get('/data') { Buffer b, Headers h, List<String> c ->
+  get('/data') { ->
     return new Response.Builder().statusLine(StatusLines.OK).
       body(Builder.build(data), MediaTypes.JSON).build()
   }
@@ -71,7 +71,7 @@ def server = new RestServer().with {
     }
     return builder.build()
   }
-  post('/data') { Buffer b, Headers h, List<String> c ->
+  post('/data') { Buffer b, Headers h, List<String> c, HttpUrl url ->
     def builder = new Response.Builder()
     if (MediaType.parse(h.get('Content-Type')) == MediaTypes.JSON) {
       try {

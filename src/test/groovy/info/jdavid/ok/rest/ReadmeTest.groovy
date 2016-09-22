@@ -1,6 +1,7 @@
 package info.jdavid.ok.rest
 
 import okhttp3.Headers
+import okhttp3.HttpUrl
 import okhttp3.MediaType
 import groovy.transform.CompileStatic
 import info.jdavid.ok.json.Builder
@@ -23,7 +24,7 @@ class ReadmeTest {
       [name: 'c', value: '3']
     ]);
     def server = new RestServer().with {
-      get('/data') { Buffer b, Headers h, List<String> c ->
+      get('/data') { ->
         return new Response.Builder().statusLine(StatusLines.OK).
           body(Builder.build(data), MediaTypes.JSON).build()
       }
@@ -39,7 +40,7 @@ class ReadmeTest {
         }
         return builder.build()
       }
-      post('/data') { Buffer b, Headers h, List<String> c ->
+      post('/data') { Buffer b, Headers h, List<String> c, HttpUrl url ->
         def builder = new Response.Builder()
         if (MediaType.parse(h.get('Content-Type')) == MediaTypes.JSON) {
           try {
