@@ -9,7 +9,7 @@ buildscript {
 }
 
 group 'info.jdavid.ok.rest'
-version '3.4.1-10'
+version '3.4.1-11'
 
 apply plugin: 'groovy'
 apply plugin: 'java'

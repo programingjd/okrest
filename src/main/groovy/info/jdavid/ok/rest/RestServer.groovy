@@ -45,7 +45,13 @@ class RestServer extends HttpServer {
               groups = []
             }
             try {
-              return value(requestBody, requestHeaders, groups)
+              switch (value.maximumNumberOfParameters) {
+                case 0: return value()
+                case 1: return value(requestBody)
+                case 2: return value(requestBody, requestHeaders)
+                case 3: return value(requestBody, requestHeaders, groups)
+                default: return value(requestBody, requestHeaders, groups, url)
+              }
             }
             catch (Exception exception) {
               exception.printStackTrace()
@@ -63,8 +69,6 @@ class RestServer extends HttpServer {
     handlers.clear()
     return this
   }
-
-
 
   protected void setup() {
     super.setup()
