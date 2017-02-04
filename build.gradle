@@ -37,7 +37,7 @@ dependencies {
 //      url = 'http://dl.bintray.com/programingjd/maven/info/jdavid/ok/server/okserver/1.0/'
 //    }
 //  }
-  compile 'info.jdavid.ok.server:okserver:3.6.0'
+  compile 'info.jdavid.ok.server:okserver:3.6.0-2'
   testCompile 'junit:junit:4.12'
   testCompile 'com.squareup.okhttp3:okhttp:3.6.0'
   testCompile 'info.jdavid.ok.json:okjson:3.6.0'
@@ -151,4 +151,10 @@ bintray {
 def getBintrayApiKey() {
   def f = new File("$projectDir/local.properties")
   f.text.splitEachLine('=', { if (it && it[0] == 'bintrayApiKey') return it[1] })
+}
+
+task runStressTestServer(type: JavaExec, dependsOn:[testClasses]) {
+  main = 'info.jdavid.ok.rest.StressTest$Server'
+  classpath = sourceSets.test.runtimeClasspath
+  jvmArgs = [ '-Xms8m', '-Xmx128m' ]
 }

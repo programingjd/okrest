@@ -1,5 +1,6 @@
 package info.jdavid.ok.rest
 
+import groovy.transform.CompileStatic
 import okhttp3.Headers
 import okhttp3.HttpUrl
 import okhttp3.MediaType
@@ -22,18 +23,18 @@ import static org.junit.Assert.*
 
 import java.util.concurrent.TimeUnit
 
-
-class RestServerTest {
+@CompileStatic
+public class RestServerTest {
 
   private static Request.Builder request(final String... segments) {
-    HttpUrl.Builder url = new HttpUrl.Builder().scheme('http').host('localhost').port(8080)
-    segments.each { url.addPathSegment(it) }
+    final HttpUrl.Builder url = new HttpUrl.Builder().scheme('http').host('localhost').port(8080)
+    segments.each { url.addPathSegment(it as String) }
     new Request.Builder().url(url.build())
   }
 
   private static Request.Builder requestWithQuery(final Map<String, String> query, final String... segments) {
     HttpUrl.Builder url = new HttpUrl.Builder().scheme('http').host('localhost').port(8080)
-    segments.each { url.addPathSegment(it) }
+    segments.each { url.addPathSegment(it as String) }
     query.each { url.addQueryParameter(it.key, it.value) }
     new Request.Builder().url(url.build())
   }
@@ -166,7 +167,7 @@ class RestServerTest {
   @Test
   public void testPostParamsInUrl() {
     def testHandler = { Buffer body, Headers headers, List<String> captures ->
-      def json = new JsonSlurper().parseText(body.readUtf8())
+      Map<String, Object> json = new JsonSlurper().parseText(body.readUtf8()) as Map<String, Object>
       json.key1 = captures[0]
       json.key2 = captures[1]
       new Response.Builder().statusLine(StatusLines.OK).

@@ -1,6 +1,7 @@
 package info.jdavid.ok.rest
 
 import groovy.transform.CompileStatic
+import groovy.transform.PackageScope
 import info.jdavid.ok.server.HttpServer
 import info.jdavid.ok.server.RequestHandler
 import info.jdavid.ok.server.Response
@@ -12,7 +13,7 @@ import okio.Buffer
 import java.util.regex.Pattern
 
 @CompileStatic
-class RestServer extends HttpServer {
+public class RestServer extends HttpServer {
 
   private final Map<String, Map<Pattern, Closure<Response>>> handlers = [:]
 
@@ -65,13 +66,9 @@ class RestServer extends HttpServer {
     })
   }
 
-  RestServer clearHandlers() {
+  @PackageScope RestServer clearHandlers() {
     handlers.clear()
     return this
-  }
-
-  protected void setup() {
-    super.setup()
   }
 
   public RestServer options(final String pattern, final Closure<Response> closure) {

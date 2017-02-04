@@ -12,11 +12,10 @@ import info.jdavid.ok.server.StatusLines
 import okio.Buffer
 import org.junit.Test
 
+@CompileStatic
+public class ReadmeTest {
 
-class ReadmeTest {
-
-  @SuppressWarnings("GroovyUnusedAssignment")
-  @Test @CompileStatic
+  @Test @SuppressWarnings("GroovyUnusedAssignment")
   public void test1() {
     List data = Collections.synchronizedList([
       [name: 'a', value: '1'],
