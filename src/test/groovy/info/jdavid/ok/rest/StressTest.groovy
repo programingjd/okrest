@@ -39,6 +39,9 @@ public class StressTest {
         return new Response.Builder().statusLine(StatusLines.OK).chunks(MediaTypes.TEXT,
                          (1..seconds).collect { new TestBody(start, it) } as ResponseBody[]).build()
       })
+      get('/loaderio-e5904ad6382227a74edb74c73ad8e603.txt', { ->
+        return new Response.Builder().statusLine(StatusLines.OK).body('loaderio-e5904ad6382227a74edb74c73ad8e603').build()
+      })
     }
 
     public static void main(final String[] args) {
