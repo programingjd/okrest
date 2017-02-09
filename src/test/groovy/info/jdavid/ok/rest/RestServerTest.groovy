@@ -46,7 +46,7 @@ public class RestServerTest {
     mServer.clearHandlers()
   }
 
-  private static RestServer mServer = null;
+  private static RestServer mServer = null
 
   @BeforeClass
   public static void setUp() {
@@ -171,7 +171,7 @@ public class RestServerTest {
       json.key1 = captures[0]
       json.key2 = captures[1]
       new Response.Builder().statusLine(StatusLines.OK).
-        body(new JsonBuilder(json).toString(), MediaTypes.JSON).build()
+        body(MediaTypes.JSON, new JsonBuilder(json).toString()).build()
     }
     server().post('/test/([a-z]+)/([0-9]+)', testHandler).with {
       def body = RequestBody.create(MediaTypes.JSON, '{"key1":null,"key2":null}')

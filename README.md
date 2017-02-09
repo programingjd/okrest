@@ -1,4 +1,4 @@
-![jcenter](https://img.shields.io/badge/_jcenter_-_3.6.0.1-6688ff.png?style=flat) &#x2003; ![jcenter](https://img.shields.io/badge/_Tests_-_10/10-green.png?style=flat)
+![jcenter](https://img.shields.io/badge/_jcenter_-_3.6.0.2-6688ff.png?style=flat) &#x2003; ![jcenter](https://img.shields.io/badge/_Tests_-_10/10-green.png?style=flat)
 # okrest
 A simple http rest server for the jvm, written in groovy with [okserver](https://github.com/programingjd/okserver).
 
@@ -7,7 +7,7 @@ A simple http rest server for the jvm, written in groovy with [okserver](https:/
 The maven artifacts are on [Bintray](https://bintray.com/programingjd/maven/info.jdavid.ok.rest/view)
 and [jcenter](https://bintray.com/search?query=info.jdavid.ok.rest).
 
-[Download](https://bintray.com/artifact/download/programingjd/maven/info/jdavid/ok/rest/okrest/3.6.0.1/okrest-3.6.0.1.jar) the latest jar.
+[Download](https://bintray.com/artifact/download/programingjd/maven/info/jdavid/ok/rest/okrest/3.6.0.2/okrest-3.6.0.2.jar) the latest jar.
 
 __Maven__
 
@@ -17,7 +17,7 @@ Include [those settings](https://bintray.com/repo/downloadMavenRepoSettingsFile/
 <dependency>
   <groupId>info.jdavid.ok.rest</groupId>
   <artifactId>okrest</artifactId>
-  <version>3.6.0.1</version>
+  <version>3.6.0.2</version>
 </dependency>
 ```
 __Gradle__
@@ -30,7 +30,7 @@ repositories {
 ```
 ```
 dependencies {
-  compile 'info.jdavid.ok.rest:okrest:3.6.0.1'
+  compile 'info.jdavid.ok.rest:okrest:3.6.0.2'
 }
 ```
 
@@ -57,21 +57,21 @@ List data = Collections.synchronizedList([
 def server = new RestServer().with {
   get('/data') { ->
     return new Response.Builder().statusLine(StatusLines.OK).
-      body(Builder.build(data), MediaTypes.JSON).build()
+      body(MediaTypes.JSON, Builder.build(data)).build()
   }
   get('/data/([a-z]+)') { Buffer b, Headers h, List<String> c ->
     def builder = new Response.Builder()
     def found = data.find { it['name'] == c[0] } as Map
     if (found) {
       builder.statusLine(StatusLines.OK).
-        body(Builder.build(found), MediaTypes.JSON)
+        body(MediaTypes.JSON, Builder.build(found))
     }
     else {
       builder.statusLine(StatusLines.NOT_FOUND).noBody()
     }
     return builder.build()
   }
-  post('/data') { Buffer b, Headers h, List<String> c, HttpUrl url ->
+  post('/data') { Buffer b, Headers h, List<String> c, HttpUrl url, String clientIp ->
     def builder = new Response.Builder()
     if (MediaType.parse(h.get('Content-Type')) == MediaTypes.JSON) {
       try {

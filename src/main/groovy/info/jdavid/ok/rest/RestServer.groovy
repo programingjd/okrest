@@ -31,7 +31,8 @@ public class RestServer extends HttpServer {
   public RestServer() {
     super()
     super.requestHandler(new RequestHandler() {
-      @Override public Response handle(final boolean secure, final String method, final HttpUrl url,
+      @Override public Response handle(final String clientIp, final boolean secure,
+                                       final String method, final HttpUrl url,
                                        final Headers requestHeaders, final Buffer requestBody) {
         def methodHandlers = handlers[method]
         final String path = url.encodedPath()
@@ -51,7 +52,8 @@ public class RestServer extends HttpServer {
                 case 1: return value(requestBody)
                 case 2: return value(requestBody, requestHeaders)
                 case 3: return value(requestBody, requestHeaders, groups)
-                default: return value(requestBody, requestHeaders, groups, url)
+                case 4: return value(requestBody, requestHeaders, groups, url)
+                default: return value(requestBody, requestHeaders, groups, url, clientIp)
               }
             }
             catch (Exception exception) {

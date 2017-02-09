@@ -21,25 +21,25 @@ public class ReadmeTest {
       [name: 'a', value: '1'],
       [name: 'b', value: '2'],
       [name: 'c', value: '3']
-    ]);
+    ])
     def server = new RestServer().with {
       get('/data') { ->
         return new Response.Builder().statusLine(StatusLines.OK).
-          body(Builder.build(data), MediaTypes.JSON).build()
+          body(MediaTypes.JSON, Builder.build(data)).build()
       }
       get('/data/([a-z]+)') { Buffer b, Headers h, List<String> c ->
         def builder = new Response.Builder()
         def found = data.find { it['name'] == c[0] } as Map
         if (found) {
           builder.statusLine(StatusLines.OK).
-            body(Builder.build(found), MediaTypes.JSON)
+            body(MediaTypes.JSON, Builder.build(found))
         }
         else {
           builder.statusLine(StatusLines.NOT_FOUND).noBody()
         }
         return builder.build()
       }
-      post('/data') { Buffer b, Headers h, List<String> c, HttpUrl url ->
+      post('/data') { Buffer b, Headers h, List<String> c, HttpUrl url, String clientIp ->
         def builder = new Response.Builder()
         if (MediaType.parse(h.get('Content-Type')) == MediaTypes.JSON) {
           try {
