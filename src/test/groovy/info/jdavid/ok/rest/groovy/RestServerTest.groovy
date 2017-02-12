@@ -1,4 +1,4 @@
-package info.jdavid.ok.rest
+package info.jdavid.ok.rest.groovy
 
 import groovy.transform.CompileStatic
 import okhttp3.Headers
@@ -42,15 +42,15 @@ public class RestServerTest {
   private static OkHttpClient client =
     new OkHttpClient.Builder().readTimeout(0, TimeUnit.SECONDS).build()
 
-  private static RestServer server() {
+  private static info.jdavid.ok.rest.groovy.RestServer server() {
     mServer.clearHandlers()
   }
 
-  private static RestServer mServer = null
+  private static info.jdavid.ok.rest.groovy.RestServer mServer = null
 
   @BeforeClass
   public static void setUp() {
-    mServer = new RestServer().with { port(8080); start(); it }
+    mServer = new info.jdavid.ok.rest.groovy.RestServer().with { port(8080); start(); it }
   }
 
   @AfterClass

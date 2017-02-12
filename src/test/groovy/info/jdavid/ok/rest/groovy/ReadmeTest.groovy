@@ -1,4 +1,4 @@
-package info.jdavid.ok.rest
+package info.jdavid.ok.rest.groovy
 
 import okhttp3.Headers
 import okhttp3.HttpUrl
@@ -60,16 +60,16 @@ public class ReadmeTest {
         return builder.build()
       }
       delete('/data/([a-z]+)') { Buffer b, Headers h, List<String> c ->
-          def builder = new Response.Builder()
-          def found = data.find { it['name'] == c[0] } as Map
-          if (found) {
-            data.remove(found)
-            builder.statusLine(StatusLines.OK).noBody()
-          }
-          else {
-            builder.statusLine(StatusLines.NO_CONTENT).noBody()
-          }
-          return builder.build()
+        def builder = new Response.Builder()
+        def found = data.find { it['name'] == c[0] } as Map
+        if (found) {
+          data.remove(found)
+          builder.statusLine(StatusLines.OK).noBody()
+        }
+        else {
+          builder.statusLine(StatusLines.NO_CONTENT).noBody()
+        }
+        return builder.build()
       }
     }
   }

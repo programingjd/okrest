@@ -1,4 +1,4 @@
-package info.jdavid.ok.rest
+package info.jdavid.ok.rest.groovy
 
 import groovy.transform.CompileStatic
 import info.jdavid.ok.server.Dispatcher
@@ -26,7 +26,7 @@ public class StressTest {
 
   private static final int seconds = 15
 
-  public static class Server extends RestServer {
+  public static class Server extends info.jdavid.ok.rest.groovy.RestServer {
 
     public Server() {
       port(8080)

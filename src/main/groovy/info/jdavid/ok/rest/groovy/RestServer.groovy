@@ -1,4 +1,4 @@
-package info.jdavid.ok.rest
+package info.jdavid.ok.rest.groovy
 
 import groovy.transform.CompileStatic
 import groovy.transform.PackageScope
@@ -102,3 +102,4 @@ public class RestServer extends HttpServer {
   }
 
 }
+

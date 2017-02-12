@@ -28,7 +28,6 @@ repositories {
 }
 
 dependencies {
-  compile 'org.codehaus.groovy:groovy-all:2.4.8'
 //  compile ('info.jdavid.ok.server:okserver:1.0') {
 //    artifact {
 //      name = 'okserver'
@@ -38,6 +37,7 @@ dependencies {
 //    }
 //  }
   compile 'info.jdavid.ok.server:okserver:3.6.0.2'
+  compile 'org.codehaus.groovy:groovy-all:2.4.8'
   testCompile 'junit:junit:4.12'
   testCompile 'com.squareup.okhttp3:okhttp:3.6.0'
   testCompile 'info.jdavid.ok.json:okjson:3.6.0.1'
@@ -92,9 +92,9 @@ test {
   finalizedBy tasks.jacocoTestReport
 }
 
-task groovydocJar(type: Jar, dependsOn: javadoc) {
+task javadocJar(type: Jar, dependsOn: javadoc) {
   classifier = 'javadoc'
-  from groovydoc.destinationDir
+  from javadoc.destinationDir
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
@@ -103,7 +103,7 @@ task sourcesJar(type: Jar, dependsOn: classes) {
 }
 
 artifacts {
-  archives sourcesJar, groovydocJar
+  archives sourcesJar, javadocJar
 }
 
 publishing {
@@ -111,7 +111,7 @@ publishing {
     mavenJava(MavenPublication) {
       from components.java
       artifact sourcesJar
-      artifact groovydocJar
+      artifact javadocJar
     }
   }
   repositories {
