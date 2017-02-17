@@ -42,15 +42,15 @@ public class RestServerTest {
   private static OkHttpClient client =
     new OkHttpClient.Builder().readTimeout(0, TimeUnit.SECONDS).build()
 
-  private static info.jdavid.ok.rest.groovy.RestServer server() {
+  private static RestServer server() {
     mServer.clearHandlers()
   }
 
-  private static info.jdavid.ok.rest.groovy.RestServer mServer = null
+  private static RestServer mServer = null
 
   @BeforeClass
   public static void setUp() {
-    mServer = new info.jdavid.ok.rest.groovy.RestServer().with { port(8080); start(); it }
+    mServer = new RestServer().with { port(8080); start(); it }
   }
 
   @AfterClass

@@ -127,7 +127,7 @@ bintray {
   key = getBintrayApiKey()
   dryRun = false
   publish = true
-  publications = ['mavenJava']
+  publications = [ 'mavenJava' ]
   pkg {
     repo = 'maven'
     name = 'info.jdavid.ok.rest'
